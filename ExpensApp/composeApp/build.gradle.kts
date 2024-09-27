@@ -44,6 +44,9 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
 
+            //Material Icons extended
+            api(compose.materialIconsExtended)
+
             //PreCompose dependency for navigation
             api(compose.animation)
             api(compose.foundation)
