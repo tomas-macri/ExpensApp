@@ -43,6 +43,12 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+
+            //PreCompose dependency for navigation
+            api(compose.animation)
+            api(compose.foundation)
+            api(libs.precompose)
+            api(libs.precompose.viewmodel)
         }
     }
 }
