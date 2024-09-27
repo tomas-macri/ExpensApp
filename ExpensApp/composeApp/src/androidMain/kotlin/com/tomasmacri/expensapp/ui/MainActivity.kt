@@ -1,4 +1,4 @@
-package com.tomasmacri.expensapp
+package com.tomasmacri.expensapp.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
