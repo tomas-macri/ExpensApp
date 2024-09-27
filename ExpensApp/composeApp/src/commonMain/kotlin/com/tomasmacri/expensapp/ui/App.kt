@@ -10,6 +10,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.tomasmacri.expensapp.ui.theme.ExpensAppTheme
+import com.tomasmacri.expensapp.ui.theme.getColorsTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -21,7 +23,8 @@ import moe.tlaster.precompose.PreComposeApp
 @Preview
 fun App() {
     PreComposeApp {
-        MaterialTheme {
+        val colors = getColorsTheme()
+        ExpensAppTheme {
             var showContent by remember { mutableStateOf(false) }
             Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                 Button(onClick = { showContent = !showContent }) {
