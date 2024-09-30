@@ -12,20 +12,26 @@ object ExpensesManager {
         Expense(5, "Plane tickets", "Plane tickets to Madrid", 1164.0, ExpenseCategory.TRIP),
         Expense(6, "Doors", "New doors for the rooms", 503.0, ExpenseCategory.HOUSE),
         Expense(7, "Lautaro's present", "A present for Lautaro's birthday", 35.32, ExpenseCategory.PARTY),
+        Expense(8, "Football tickets", "Racing Club vs Boca Juniors", 25.3, ExpenseCategory.OTHER),
+        Expense(9, "Tomorrowland", "Tomorrowland W1", 381.5, ExpenseCategory.CONCERTS),
+        Expense(10, "Mercadona", "Weekly buy", 34.3, ExpenseCategory.GROCERIES),
     )
 
     private var expenseId = (staticExpenses.lastOrNull()?.id ?: 0)
     fun getAllExpenses() : List<Expense> = staticExpenses.toList()
 
-    fun addExpense(expense: Expense) {
-        staticExpenses.add(expense.copy(id = expenseId++))
+    fun addExpense(expense: Expense): Expense {
+        val newExpense = expense.copy(id = expenseId++)
+        staticExpenses.add(newExpense)
+        return newExpense
     }
 
-    fun editExpense(expense: Expense) {
+    fun editExpense(expense: Expense): Expense {
         val indexToReplace = staticExpenses.indexOfFirst { it.id == expense.id }
         if (indexToReplace > 0) {
             staticExpenses[indexToReplace] = expense
         }
+        return expense
     }
 
 }
