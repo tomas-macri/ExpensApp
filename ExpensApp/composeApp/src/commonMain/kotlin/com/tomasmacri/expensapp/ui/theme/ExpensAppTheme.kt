@@ -28,7 +28,7 @@ fun getColorsTheme(): ExpensAppColorTheme {
     val purpleExpensApp = Color(0xFF6A66FF)
     val expenseItemExpensApp = if (isDarkMode) Color(0xFF090808) else Color(0xFFF1F1F1)
     val backgroundColorExpensApp = if (isDarkMode) Color(0xFF1E1C1C) else Color.White
-    val textColorExpensApp = if (isDarkMode) Color.White else Color.Black
+    val textColorExpensApp = if (isDarkMode) Color.Black else Color.White
     val addIconColorExpensApp = if (isDarkMode) purpleExpensApp else Color.Black
     val colorArrowRoundExpensApp = if (isDarkMode) purpleExpensApp else Color.Gray.copy(alpha = 0.2f)
 
