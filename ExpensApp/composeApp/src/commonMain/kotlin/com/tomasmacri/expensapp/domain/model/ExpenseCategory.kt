@@ -1,9 +1,11 @@
 package com.tomasmacri.expensapp.domain.model
 
 enum class ExpenseCategory(name: String) {
-    GROCERIES("Groceries"),
-    LEISURE("Leisure"),
-    FOOD("Food"),
-    TRIP("Trip"),
-    OTHER("Other")
+    GROCERIES("groceries"),
+    FOOD("food"),
+    TRIP("trip"),
+    HOUSE("house"),
+    PARTY("party"),
+    CONCERTS("concerts"),
+    OTHER("other")
 }
