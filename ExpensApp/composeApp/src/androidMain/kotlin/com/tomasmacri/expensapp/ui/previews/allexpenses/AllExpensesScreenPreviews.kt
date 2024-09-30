@@ -1,4 +1,4 @@
-package com.tomasmacri.expensapp.ui.previews
+package com.tomasmacri.expensapp.ui.previews.allexpenses
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -8,9 +8,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tomasmacri.expensapp.domain.model.Expense
 import com.tomasmacri.expensapp.domain.model.ExpenseCategory
-import com.tomasmacri.expensapp.ui.AllExpensesHeader
-import com.tomasmacri.expensapp.ui.ExpenseItem
-import com.tomasmacri.expensapp.ui.ExpensesTotalHeader
+import com.tomasmacri.expensapp.ui.allexpenses.AllExpensesHeader
+import com.tomasmacri.expensapp.ui.allexpenses.ExpenseItem
+import com.tomasmacri.expensapp.ui.allexpenses.ExpensesTotalHeader
 import com.tomasmacri.expensapp.ui.theme.getColorsTheme
 
 @Composable
