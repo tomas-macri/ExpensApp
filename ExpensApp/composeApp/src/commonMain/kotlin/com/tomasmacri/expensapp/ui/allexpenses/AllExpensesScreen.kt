@@ -126,8 +126,8 @@ fun ExpensesTotalHeader(colors: ExpensAppColorTheme, totalAmount: Double, curren
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = "$$totalAmount", fontWeight = FontWeight.ExtraBold, color = colors.textColorExpensApp, fontSize = 24.sp)
-            Text(text = currency, color = colors.textColorExpensApp.copy(alpha = 0.8f))
+            Text(text = "$$totalAmount", fontWeight = FontWeight.ExtraBold, color = colors.textColorOnBackgroundExpensApp, fontSize = 24.sp)
+            Text(text = currency, color = colors.textColorOnBackgroundExpensApp.copy(alpha = 0.8f))
         }
     }
 }
