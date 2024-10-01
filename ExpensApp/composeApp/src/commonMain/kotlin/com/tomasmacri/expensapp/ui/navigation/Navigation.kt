@@ -18,11 +18,11 @@ import moe.tlaster.precompose.viewmodel.viewModel
 fun Navigation(navigator: Navigator, colors: ExpensAppColorTheme) {
     NavHost(
         modifier = Modifier.background(colors.backgroundColorExpensApp),
-        initialRoute = "/home",
+        initialRoute = NavRoute.HOME.route,
         navigator = navigator,
     ) {
         scene(
-            route = "/home"
+            route = NavRoute.HOME.route
         ) {
             val viewModel: AllExpensesViewModel = viewModel(modelClass = AllExpensesViewModel::class) {
                 AllExpensesViewModel(ExpensesRepositoryImpl(ExpensesManager))
@@ -33,7 +33,7 @@ fun Navigation(navigator: Navigator, colors: ExpensAppColorTheme) {
         }
 
         scene(
-            route = "/expense_details{id}"
+            route = "/expense_details/{id}"
         ) {
 
         }
