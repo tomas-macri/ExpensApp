@@ -1,4 +1,4 @@
- package com.tomasmacri.expensapp.ui.allexpenses
+package com.tomasmacri.expensapp.ui.allexpenses
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -32,30 +32,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tomasmacri.expensapp.domain.model.Expense
 import com.tomasmacri.expensapp.ui.theme.ExpensAppColorTheme
-import com.tomasmacri.expensapp.ui.theme.ExpensAppTheme
-import moe.tlaster.precompose.PreComposeApp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
- @OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 @Preview
-fun AllExpensesScreen(colors: ExpensAppColorTheme, uiState: AllExpensesState) {
-    PreComposeApp {
-        ExpensAppTheme {
-            LazyColumn(modifier = Modifier.background(colors.backgroundColorExpensApp).padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                stickyHeader {
-                    Column(modifier = Modifier.fillParentMaxWidth().background(color = colors.backgroundColorExpensApp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        ExpensesTotalHeader(colors = colors, totalAmount = uiState.totalAmount, currency = "USD")
-                        AllExpensesHeader(colors = colors) {}
-                    }
-                }
-                items(uiState.expenses, key = { it.id }) { expenseItem ->
-                    ExpenseItem(colors, expenseItem) {}
-                }
-
+fun AllExpensesScreen(colors: ExpensAppColorTheme, uiState: AllExpensesState, onExpenseSelected: (Expense) -> Unit) {
+    LazyColumn(
+        modifier = Modifier.background(colors.backgroundColorExpensApp).padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        stickyHeader {
+            Column(modifier = Modifier.fillParentMaxWidth().background(color = colors.backgroundColorExpensApp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                ExpensesTotalHeader(colors = colors, totalAmount = uiState.totalAmount, currency = "USD")
+                AllExpensesHeader(colors = colors) {}
             }
         }
+        items(uiState.expenses, key = { it.id }) { expenseItem ->
+            ExpenseItem(colors, expenseItem) {
+                onExpenseSelected(expenseItem)
+            }
+        }
+
     }
 }
 
