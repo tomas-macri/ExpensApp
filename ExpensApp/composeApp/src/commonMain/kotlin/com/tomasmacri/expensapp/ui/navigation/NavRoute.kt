@@ -9,7 +9,7 @@ import moe.tlaster.precompose.navigation.Navigator
 
 enum class NavRoute(val route: String, val baseRoute: String, val navigationIcon: ImageVector, val floatingActionButtonIcon: ImageVector?, val onClickFloatingActionButton: (Navigator) -> Unit = {}) {
     HOME("home", "home", Icons.Default.Apps, Icons.Default.Add, {navigator -> navigator.navigate(EDIT_EXPENSE.route) }),
-    EDIT_EXPENSE("edit_expense/{id}", "edit_expense/", Icons.Default.ArrowBackIosNew, null);
+    EDIT_EXPENSE("edit_expense/{id}?", "edit_expense/", Icons.Default.ArrowBackIosNew, null);
 
     companion object {
         fun findByPath(route: String?): NavRoute? {
