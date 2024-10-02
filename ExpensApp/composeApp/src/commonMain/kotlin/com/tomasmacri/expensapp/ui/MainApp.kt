@@ -17,9 +17,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tomasmacri.expensapp.ui.navigation.NavRoute
 import com.tomasmacri.expensapp.ui.navigation.Navigation
+import com.tomasmacri.expensapp.ui.navigation.TopBarTitles
 import com.tomasmacri.expensapp.ui.theme.ExpensAppTheme
 import com.tomasmacri.expensapp.ui.theme.getColorsTheme
 import moe.tlaster.precompose.PreComposeApp
+import moe.tlaster.precompose.navigation.BackStackEntry
+import moe.tlaster.precompose.navigation.Navigator
+import moe.tlaster.precompose.navigation.path
 import moe.tlaster.precompose.navigation.rememberNavigator
 
 @Composable
@@ -28,8 +32,9 @@ fun MainApp() {
     PreComposeApp {
         ExpensAppTheme {
             val navigator = rememberNavigator()
-            val currentRoute = NavRoute.findByPath(navigator.currentEntry.collectAsState(null).value?.path)
-
+            val currentBackStackEntry = navigator.currentEntry.collectAsState(null).value
+            val currentNavRoute = NavRoute.findByPath(currentBackStackEntry?.path)
+            val topBarTitle = getTopAppBarTitle(currentBackStackEntry, currentNavRoute)
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
                 topBar = {
@@ -37,17 +42,17 @@ fun MainApp() {
                         elevation = 0.dp,
                         title = {
                             Text(
-                                text = currentRoute?.title ?: "",
+                                text = topBarTitle,
                                 color = colors.textColorExpensApp,
                                 fontSize = 24.sp
                             )
                         },
                         backgroundColor = colors.backgroundColorExpensApp,
-                        navigationIcon = currentRoute?.navigationIcon?.let {
+                        navigationIcon = currentNavRoute?.navigationIcon?.let {
                             {
                                 IconButton(
-                                    modifier = Modifier.padding(start = 16.dp),
-                                    onClick = {},
+                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                    onClick = { navigator.popBackStack() },
                                 ) {
                                     Icon(
                                         imageVector = it,
@@ -60,14 +65,14 @@ fun MainApp() {
                     )
                 },
                 floatingActionButton = {
-                    currentRoute?.floatingActionButtonIcon?.let {
+                    currentNavRoute?.floatingActionButtonIcon?.let {
                         FloatingActionButton(
                             modifier = Modifier.padding(8.dp),
                             shape = RoundedCornerShape(50),
                             backgroundColor = colors.addIconColorExpensApp,
                             contentColor = Color.White,
                             onClick = {
-                                currentRoute.onClickFloatingActionButton(navigator)
+                                currentNavRoute.onClickFloatingActionButton(navigator)
                             }
                         ) {
                             Icon(
@@ -81,6 +86,23 @@ fun MainApp() {
             ) {
                 Navigation(navigator = navigator, colors = colors)
             }
+        }
+    }
+}
+
+@Composable
+fun getTopAppBarTitle(currentBackStackEntry: BackStackEntry?, currentNavRoute: NavRoute?): String {
+    return when(currentNavRoute) {
+        NavRoute.HOME -> TopBarTitles.HOME.title
+        NavRoute.EDIT_EXPENSE -> {
+            if (currentBackStackEntry?.path<Int>("id") != null) {
+                TopBarTitles.EDIT_EXPENSE.title
+            } else {
+                TopBarTitles.ADD_EXPENSE.title
+            }
+        }
+        else -> {
+            TopBarTitles.HOME.title
         }
     }
 }
