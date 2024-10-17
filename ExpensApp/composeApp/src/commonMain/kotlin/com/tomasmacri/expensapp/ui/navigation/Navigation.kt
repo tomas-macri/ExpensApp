@@ -9,6 +9,7 @@ import com.tomasmacri.expensapp.data.repository.impl.ExpensesRepositoryImpl
 import com.tomasmacri.expensapp.ui.allexpenses.AllExpensesScreen
 import com.tomasmacri.expensapp.ui.allexpenses.AllExpensesViewModel
 import com.tomasmacri.expensapp.ui.editexpense.EditExpenseScreen
+import com.tomasmacri.expensapp.ui.editexpense.EditExpensesViewModel
 import com.tomasmacri.expensapp.ui.theme.ExpensAppColorTheme
 import moe.tlaster.precompose.flow.collectAsStateWithLifecycle
 import moe.tlaster.precompose.navigation.NavHost
@@ -42,7 +43,20 @@ fun Navigation(navigator: Navigator, colors: ExpensAppColorTheme) {
             route = NavRoute.EDIT_EXPENSE.route
         ) {
             val expenseId = it.path<Int>("id")
-            EditExpenseScreen(expenseId = expenseId)
+
+            val viewModel: EditExpensesViewModel = viewModel(modelClass = EditExpensesViewModel::class) {
+                EditExpensesViewModel(ExpensesRepositoryImpl(ExpensesManager))
+            }
+            val editExpensesUiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+
+            EditExpenseScreen(expenseId = expenseId, colors = colors, uiState = editExpensesUiState, onGetExpenseData = { id -> viewModel.getExpense(id) }) {
+                if (expenseId == null) {
+                    viewModel.addExpense()
+                } else {
+                    viewModel.updateExpense()
+                }
+            }
         }
 
     }
