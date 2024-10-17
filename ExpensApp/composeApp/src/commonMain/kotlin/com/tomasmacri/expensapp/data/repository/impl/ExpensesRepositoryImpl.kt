@@ -19,4 +19,8 @@ class ExpensesRepositoryImpl(private val expenseManager: ExpensesManager): Expen
     override fun editExpense(expense: Expense): Flow<Expense> {
         return flowOf(expenseManager.editExpense(expense))
     }
+
+    override fun getExpense(id: Int): Flow<Expense> {
+        return flowOf(expenseManager.getExpense(id))
+    }
 }

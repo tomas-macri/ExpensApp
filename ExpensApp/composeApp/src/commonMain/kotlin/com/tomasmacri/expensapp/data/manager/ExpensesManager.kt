@@ -34,4 +34,8 @@ object ExpensesManager {
         return expense
     }
 
+    fun getExpense(id: Int): Expense {
+        return staticExpenses.firstOrNull { it.id == id } ?: Expense(0)
+    }
+
 }
