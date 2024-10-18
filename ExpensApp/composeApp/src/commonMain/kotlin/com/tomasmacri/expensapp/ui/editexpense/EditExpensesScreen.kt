@@ -81,7 +81,12 @@ fun EditExpenseScreen(
 
     ModalBottomSheetLayout(
         sheetContent = {
-            CategoriesModalBottomSheet(uiState.categories) { onUiChangeExpenseDate(it, EditExpenseFormFields.EXPENSE_CATEGORY) }
+            CategoriesModalBottomSheet(uiState.categories) {
+                onUiChangeExpenseDate(it, EditExpenseFormFields.EXPENSE_CATEGORY)
+                scope.launch {
+                    sheetState.hide()
+                }
+            }
         },
         sheetState = sheetState
     ) {
