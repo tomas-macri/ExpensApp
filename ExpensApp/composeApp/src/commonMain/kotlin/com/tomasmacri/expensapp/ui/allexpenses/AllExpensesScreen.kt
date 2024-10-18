@@ -19,8 +19,6 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -74,7 +72,7 @@ fun ExpenseItem(colors: ExpensAppColorTheme, expenseItem: Expense, onItemClick: 
             ) {
                 Image(
                     modifier = Modifier.padding(10.dp),
-                    imageVector = Icons.Default.ShoppingCart,
+                    imageVector = getIconByExpenseCategory(expenseItem.category),
                     contentDescription = "Expense category",
                     colorFilter = ColorFilter.tint(Color.White)
                 )
