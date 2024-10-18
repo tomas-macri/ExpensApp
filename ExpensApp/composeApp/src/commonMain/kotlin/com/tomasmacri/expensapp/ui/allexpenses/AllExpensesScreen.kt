@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.tomasmacri.expensapp.domain.model.Expense
 import com.tomasmacri.expensapp.ui.theme.ExpensAppColorTheme
 import com.tomasmacri.expensapp.ui.utils.getIconByExpenseCategory
+import com.tomasmacri.expensapp.ui.utils.toPriceString
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -90,9 +91,7 @@ fun ExpenseItem(colors: ExpensAppColorTheme, expenseItem: Expense, onItemClick: 
                 Text(text = expenseItem.name, fontWeight = FontWeight.Bold, color = colors.addIconColorExpensApp, fontSize = 20.sp)
                 Text(text = expenseItem.description, color = colors.addIconColorExpensApp.copy(alpha = 0.5f), fontSize = 16.sp)
             }
-
-
-            Text(text = "$${expenseItem.amount}", fontWeight = FontWeight.Bold, color = colors.addIconColorExpensApp, fontSize = 20.sp)
+            Text(text = "$${expenseItem.amount.toPriceString()}", fontWeight = FontWeight.Bold, color = colors.addIconColorExpensApp, fontSize = 20.sp)
         }
     }
 }
@@ -127,7 +126,7 @@ fun ExpensesTotalHeader(colors: ExpensAppColorTheme, totalAmount: Double, curren
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = "$$totalAmount", fontWeight = FontWeight.ExtraBold, color = colors.textColorOnBackgroundExpensApp, fontSize = 24.sp)
+            Text(text = "$${totalAmount.toPriceString()}", fontWeight = FontWeight.ExtraBold, color = colors.textColorOnBackgroundExpensApp, fontSize = 24.sp)
             Text(text = currency, color = colors.textColorOnBackgroundExpensApp.copy(alpha = 0.8f))
         }
     }
