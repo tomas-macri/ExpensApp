@@ -35,6 +35,9 @@ fun Navigation(navigator: Navigator, colors: ExpensAppColorTheme) {
             AllExpensesScreen(
                 colors = colors,
                 uiState = allExpensesUiState,
+                onGetAllExpenses = {
+                   viewModel.getAllExpenses()
+                },
                 onExpenseSelected = {
                     navigator.navigate("${NavRoute.EDIT_EXPENSE.baseRoute}${it.id}")
                 })

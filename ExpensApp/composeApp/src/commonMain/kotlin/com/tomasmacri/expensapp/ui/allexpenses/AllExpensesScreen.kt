@@ -30,12 +30,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tomasmacri.expensapp.domain.model.Expense
 import com.tomasmacri.expensapp.ui.theme.ExpensAppColorTheme
+import com.tomasmacri.expensapp.ui.utils.getIconByExpenseCategory
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 @Preview
-fun AllExpensesScreen(colors: ExpensAppColorTheme, uiState: AllExpensesState, onExpenseSelected: (Expense) -> Unit) {
+fun AllExpensesScreen(colors: ExpensAppColorTheme, uiState: AllExpensesState, onGetAllExpenses: () -> Unit, onExpenseSelected: (Expense) -> Unit) {
+    LaunchedEffect(Unit) {
+        onGetAllExpenses()
+    }
     LazyColumn(
         modifier = Modifier.background(colors.backgroundColorExpensApp).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)

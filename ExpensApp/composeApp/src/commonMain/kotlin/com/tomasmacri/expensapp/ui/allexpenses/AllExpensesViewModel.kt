@@ -12,11 +12,7 @@ class AllExpensesViewModel(private val expensesRepository: ExpensesRepository): 
     private val _uiState = MutableStateFlow(AllExpensesState())
     val uiState = _uiState.asStateFlow()
 
-    init {
-        getAllExpenses()
-    }
-
-    private fun getAllExpenses() {
+    fun getAllExpenses() {
         viewModelScope.launch {
             expensesRepository.getAllExpenses().collect { newExpenseList ->
                 _uiState.update {
