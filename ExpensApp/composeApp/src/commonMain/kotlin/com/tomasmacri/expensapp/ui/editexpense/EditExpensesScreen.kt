@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
@@ -70,7 +71,7 @@ fun EditExpenseScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(sheetState) {
+    LaunchedEffect(sheetState.targetValue) {
         if (sheetState.targetValue == ModalBottomSheetValue.Expanded) {
             keyboardController?.hide()
         }
