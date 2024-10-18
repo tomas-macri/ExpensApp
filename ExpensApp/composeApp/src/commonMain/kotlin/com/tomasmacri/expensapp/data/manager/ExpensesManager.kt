@@ -17,7 +17,7 @@ object ExpensesManager {
         Expense(10, "Mercadona", "Weekly buy", 34.3, ExpenseCategory.GROCERIES),
     )
 
-    private var expenseId = (staticExpenses.lastOrNull()?.id ?: 0)
+    private var expenseId = (staticExpenses.lastOrNull()?.id ?: 0) + 1
     fun getAllExpenses() : List<Expense> = staticExpenses.toList()
 
     fun addExpense(expense: Expense): Expense {
