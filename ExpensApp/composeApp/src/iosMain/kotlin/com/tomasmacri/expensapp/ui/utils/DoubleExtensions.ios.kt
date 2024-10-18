@@ -10,6 +10,7 @@ actual fun Double.toPriceString(): String {
     formatter.locale = NSLocale.currentLocale
     formatter.minimumFractionDigits = 2u
     formatter.maximumFractionDigits = 2u
+    formatter.numberStyle = 1u
     formatter.minimumIntegerDigits = 1u //Decimal
     return formatter.stringFromNumber(NSNumber(this)) ?: ""
 }
