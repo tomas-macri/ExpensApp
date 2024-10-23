@@ -46,7 +46,7 @@ class EditExpensesViewModel(private val expensesRepository: ExpensesRepository, 
         }
     }
 
-    fun uiChangeExpenseData(newValue: Any, expenseFieldForm: EditExpenseFormFields) {
+    fun uiChangeExpenseData(newValue: Any?, expenseFieldForm: EditExpenseFormFields) {
         when(expenseFieldForm) {
             EditExpenseFormFields.EXPENSE_AMOUNT -> {
                 if (newValue is Double) {

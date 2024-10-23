@@ -33,19 +33,24 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tomasmacri.expensapp.domain.model.ExpenseCategory
@@ -61,9 +66,10 @@ fun EditExpenseScreen(
     colors: ExpensAppColorTheme,
     uiState: EditExpensesState,
     onGetInitialData: (Int?) -> Unit,
-    onUiChangeExpenseDate: (Any, EditExpenseFormFields) -> Unit,
+    onUiChangeExpenseDate: (Any?, EditExpenseFormFields) -> Unit,
     onSaveExpense: () -> Unit
 ) {
+    var priceTextfield by remember { mutableStateOf(TextFieldValue("", TextRange(0))) }
 
     val sheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden
@@ -78,6 +84,10 @@ fun EditExpenseScreen(
     }
     LaunchedEffect(key1 = Unit) {
         onGetInitialData(expenseId)
+    }
+    LaunchedEffect(key1 = uiState.originalExpense?.amount) {
+        val newAmount = (uiState.originalExpense?.amount ?: 0.0).toString()
+        priceTextfield = TextFieldValue(newAmount, TextRange(newAmount.length-1))
     }
 
     ModalBottomSheetLayout(
@@ -95,8 +105,8 @@ fun EditExpenseScreen(
             modifier = Modifier.background(colors.backgroundColorExpensApp).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(48.dp)
         ) {
-            AmountFormField(colors = colors, amount = uiState.expenseUpdated.amount.toString(), keyboardController = keyboardController) {
-                onUiChangeExpenseDate(it, EditExpenseFormFields.EXPENSE_AMOUNT)
+            AmountFormField(colors = colors, amount = priceTextfield, keyboardController = keyboardController) { newTextFieldValue ->
+                priceTextfield = moneyFilter(priceTextfield, newTextFieldValue)
             }
             CategoryFormField(colors = colors, category = uiState.expenseUpdated.category.name) {
                 scope.launch {
@@ -109,7 +119,11 @@ fun EditExpenseScreen(
             Spacer(modifier = Modifier.weight(1f))
             Button(
                 modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(45)),
-                onClick = { onSaveExpense() },
+                enabled = priceTextfield.text.toDoubleOrNull() != null,
+                onClick = {
+                    onUiChangeExpenseDate(priceTextfield.text.toDoubleOrNull(), EditExpenseFormFields.EXPENSE_AMOUNT)
+                    onSaveExpense()
+                },
                 colors = ButtonDefaults.buttonColors(backgroundColor = colors.purpleExpensApp, contentColor = Color.White)
             ) {
                 Text(
@@ -153,16 +167,16 @@ fun CategoriesModalBottomSheet(
 }
 
 @Composable
-fun AmountFormField(colors: ExpensAppColorTheme, amount: String, keyboardController: SoftwareKeyboardController?, onAmountChanged: (Double) -> Unit) {
+fun AmountFormField(colors: ExpensAppColorTheme, amount: TextFieldValue, keyboardController: SoftwareKeyboardController?, onAmountChanged: (TextFieldValue) -> Unit) {
     TitleWithFieldEditExpenseForm(colors = colors, titleText = "Amount") {
         Row(verticalAlignment = Alignment.CenterVertically) {
             TextField(
                 modifier = Modifier.weight(1f),
                 value = amount,
                 onValueChange = {
-                    val newValue = it.toDoubleOrNull() ?: 0.0
-                    onAmountChanged(newValue)
+                    onAmountChanged(it)
                 },
+                placeholder = { Text("0.00", fontSize = 35.sp, fontWeight = FontWeight.SemiBold) },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(
                     onDone = {
@@ -257,3 +271,18 @@ fun TitleWithFieldEditExpenseForm(colors: ExpensAppColorTheme, titleText: String
     }
 
 }
+
+private fun moneyFilter(currentText: TextFieldValue, newText: TextFieldValue): TextFieldValue {
+    return if (newText.text.all { it.isDigit() || isDecimalSymbol(it) }) {
+        newText.text.indices.forEach { charIndex ->
+            if (isDecimalSymbol(newText.text[charIndex]) && newText.text.substring(charIndex + 1).length > 2) {
+                return TextFieldValue(currentText.text, TextRange(newText.selection.start - 1))
+            }
+        }
+        newText
+    } else  {
+        TextFieldValue(currentText.text, TextRange(newText.selection.start-1))
+    }
+}
+
+private fun isDecimalSymbol(character: Char) = character == '.' || character == ','
