@@ -28,7 +28,7 @@ object ExpensesManager {
 
     fun editExpense(expense: Expense): Expense {
         val indexToReplace = staticExpenses.indexOfFirst { it.id == expense.id }
-        if (indexToReplace > 0) {
+        if (indexToReplace > -1) {
             staticExpenses[indexToReplace] = expense
         }
         return expense
