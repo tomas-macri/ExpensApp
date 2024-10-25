@@ -273,16 +273,17 @@ fun TitleWithFieldEditExpenseForm(colors: ExpensAppColorTheme, titleText: String
 }
 
 private fun moneyFilter(currentText: TextFieldValue, newText: TextFieldValue): TextFieldValue {
-    return if (newText.text.all { it.isDigit() || isDecimalSymbol(it) }) {
-        newText.text.indices.forEach { charIndex ->
-            if (isDecimalSymbol(newText.text[charIndex]) && newText.text.substring(charIndex + 1).length > 2) {
-                return TextFieldValue(currentText.text, TextRange(newText.selection.start - 1))
+    val newTextAsDouble = newText.copy(text = newText.text.replace(",", "."))
+    return if (newTextAsDouble.text.all { it.isDigit() || isDecimalSymbol(it) } && newTextAsDouble.text.count { isDecimalSymbol(it) } <= 1) {
+        newTextAsDouble.text.indices.forEach { charIndex ->
+            if (isDecimalSymbol(newTextAsDouble.text[charIndex]) && newTextAsDouble.text.substring(charIndex + 1).length > 2) {
+                return TextFieldValue(currentText.text, TextRange(newTextAsDouble.selection.start - 1))
             }
         }
-        newText
+        newTextAsDouble
     } else  {
         TextFieldValue(currentText.text, TextRange(newText.selection.start-1))
     }
 }
 
-private fun isDecimalSymbol(character: Char) = character == '.' || character == ','
+private fun isDecimalSymbol(character: Char) = character == '.'
