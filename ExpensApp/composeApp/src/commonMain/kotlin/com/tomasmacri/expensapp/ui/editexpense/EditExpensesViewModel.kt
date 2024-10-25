@@ -2,8 +2,7 @@ package com.tomasmacri.expensapp.ui.editexpense
 
 import com.tomasmacri.expensapp.data.repository.ExpenseCategoryRepository
 import com.tomasmacri.expensapp.data.repository.ExpensesRepository
-import com.tomasmacri.expensapp.domain.model.ExpenseCategory
-import com.tomasmacri.expensapp.ui.editexpense.model.EditExpenseFormFields
+import com.tomasmacri.expensapp.domain.model.Expense
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -19,7 +18,7 @@ class EditExpensesViewModel(private val expensesRepository: ExpensesRepository, 
     fun getExpense(id: Int) {
         viewModelScope.launch {
             expensesRepository.getExpense(id).collect { expense ->
-                _uiState.update { it.copy(originalExpense = expense, expenseUpdated = expense) }
+                _uiState.update { it.copy(originalExpense = expense) }
             }
         }
     }
@@ -32,36 +31,16 @@ class EditExpensesViewModel(private val expensesRepository: ExpensesRepository, 
         }
     }
 
-    fun addExpense() {
+    fun addExpense(expense: Expense) {
         viewModelScope.launch {
-            expensesRepository.addExpense(_uiState.value.expenseUpdated).collect {
+            expensesRepository.addExpense(expense).collect {
             }
         }
     }
 
-    fun updateExpense() {
+    fun updateExpense(expense: Expense) {
         viewModelScope.launch {
-            expensesRepository.editExpense(_uiState.value.expenseUpdated).collect {
-            }
-        }
-    }
-
-    fun uiChangeExpenseData(newValue: Any?, expenseFieldForm: EditExpenseFormFields) {
-        when(expenseFieldForm) {
-            EditExpenseFormFields.EXPENSE_AMOUNT -> {
-                if (newValue is Double) {
-                    _uiState.update { it.copy(expenseUpdated = it.expenseUpdated.copy(amount = newValue)) }
-                }
-            }
-            EditExpenseFormFields.EXPENSE_CATEGORY -> {
-                if (newValue is ExpenseCategory){
-                    _uiState.update { it.copy(expenseUpdated = it.expenseUpdated.copy(category = newValue)) }
-                }
-            }
-            EditExpenseFormFields.EXPENSE_DESCRIPTION -> {
-                if (newValue is String) {
-                    _uiState.update { it.copy(expenseUpdated = it.expenseUpdated.copy(description = newValue)) }
-                }
+            expensesRepository.editExpense(expense).collect {
             }
         }
     }

@@ -59,15 +59,14 @@ fun Navigation(navigator: Navigator, colors: ExpensAppColorTheme) {
                 expenseId = expenseId,
                 colors = colors,
                 uiState = editExpensesUiState,
-                onUiChangeExpenseDate = { newValue, field -> viewModel.uiChangeExpenseData(newValue, field) },
                 onGetInitialData = { id ->
                 id?.let { viewModel.getExpense(id) }
                 viewModel.getAllCategories()
-            }) {
+            }) { expense ->
                 if (expenseId == null) {
-                    viewModel.addExpense()
+                    viewModel.addExpense(expense)
                 } else {
-                    viewModel.updateExpense()
+                    viewModel.updateExpense(expense.copy(id = expenseId))
                 }
                 navigator.popBackStack()
             }

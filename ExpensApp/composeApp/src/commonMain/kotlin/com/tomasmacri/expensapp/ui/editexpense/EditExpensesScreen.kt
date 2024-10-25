@@ -53,8 +53,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.tomasmacri.expensapp.domain.model.Expense
 import com.tomasmacri.expensapp.domain.model.ExpenseCategory
-import com.tomasmacri.expensapp.ui.editexpense.model.EditExpenseFormFields
 import com.tomasmacri.expensapp.ui.theme.ExpensAppColorTheme
 import com.tomasmacri.expensapp.ui.utils.getIconByExpenseCategory
 import kotlinx.coroutines.launch
@@ -66,10 +66,12 @@ fun EditExpenseScreen(
     colors: ExpensAppColorTheme,
     uiState: EditExpensesState,
     onGetInitialData: (Int?) -> Unit,
-    onUiChangeExpenseDate: (Any?, EditExpenseFormFields) -> Unit,
-    onSaveExpense: () -> Unit
+    onSaveExpense: (Expense) -> Unit
 ) {
-    var priceTextfield by remember { mutableStateOf(TextFieldValue("", TextRange(0))) }
+    var expenseName by remember { mutableStateOf("") }
+    var expenseAmount by remember { mutableStateOf(TextFieldValue("", TextRange(0))) }
+    var expenseCategory by remember{ mutableStateOf(ExpenseCategory.OTHER) }
+    var expenseDescription by remember { mutableStateOf("") }
 
     val sheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden
@@ -85,15 +87,19 @@ fun EditExpenseScreen(
     LaunchedEffect(key1 = Unit) {
         onGetInitialData(expenseId)
     }
-    LaunchedEffect(key1 = uiState.originalExpense?.amount) {
-        val newAmount = (uiState.originalExpense?.amount ?: 0.0).toString()
-        priceTextfield = TextFieldValue(newAmount, TextRange(newAmount.length-1))
+    LaunchedEffect(key1 = uiState.originalExpense) {
+        uiState.originalExpense?.apply {
+            expenseName = name
+            expenseAmount = TextFieldValue(amount.toString(), TextRange(amount.toString().length - 1))
+            expenseCategory = category
+            expenseDescription = description
+        }
     }
 
     ModalBottomSheetLayout(
         sheetContent = {
             CategoriesModalBottomSheet(uiState.categories) {
-                onUiChangeExpenseDate(it, EditExpenseFormFields.EXPENSE_CATEGORY)
+                expenseCategory = it
                 scope.launch {
                     sheetState.hide()
                 }
@@ -105,24 +111,32 @@ fun EditExpenseScreen(
             modifier = Modifier.background(colors.backgroundColorExpensApp).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(48.dp)
         ) {
-            AmountFormField(colors = colors, amount = priceTextfield, keyboardController = keyboardController) { newTextFieldValue ->
-                priceTextfield = moneyFilter(priceTextfield, newTextFieldValue)
+            InputTextFormField(colors = colors, value = expenseName, keyboardController = keyboardController, titleText = "Name", placeholderText = "Enter the name of the expense...") {
+                expenseName = it
             }
-            CategoryFormField(colors = colors, category = uiState.expenseUpdated.category.name) {
+            AmountFormField(colors = colors, amount = expenseAmount, keyboardController = keyboardController) { newTextFieldValue ->
+                expenseAmount = moneyFilter(expenseAmount, newTextFieldValue)
+            }
+            CategoryFormField(colors = colors, category = expenseCategory.name) {
                 scope.launch {
                     sheetState.show()
                 }
             }
-            DescriptionFormField(colors = colors, description = uiState.expenseUpdated.description, keyboardController = keyboardController) {
-                onUiChangeExpenseDate(it, EditExpenseFormFields.EXPENSE_DESCRIPTION)
+            InputTextFormField(colors = colors, value = expenseDescription, keyboardController = keyboardController, titleText = "Description", placeholderText = "Enter the description of the expense...") {
+                expenseDescription = it
             }
             Spacer(modifier = Modifier.weight(1f))
             Button(
                 modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(45)),
-                enabled = priceTextfield.text.toDoubleOrNull() != null,
+                enabled = expenseAmount.text.toDoubleOrNull() != null,
                 onClick = {
-                    onUiChangeExpenseDate(priceTextfield.text.toDoubleOrNull(), EditExpenseFormFields.EXPENSE_AMOUNT)
-                    onSaveExpense()
+                    onSaveExpense(Expense(
+                        id = 0,
+                        name = expenseName,
+                        amount = expenseAmount.text.toDoubleOrNull() ?: 0.0,
+                        category = expenseCategory,
+                        description = expenseDescription
+                    ))
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = colors.purpleExpensApp, contentColor = Color.White)
             ) {
@@ -229,15 +243,15 @@ fun CategoryFormField(colors: ExpensAppColorTheme, category: String, openBottomS
 
 
 @Composable
-fun DescriptionFormField(colors: ExpensAppColorTheme, description: String, keyboardController: SoftwareKeyboardController?, onDescriptionChanged: (String) -> Unit) {
-    TitleWithFieldEditExpenseForm(colors = colors, titleText = "Description") {
+fun InputTextFormField(colors: ExpensAppColorTheme, value: String, keyboardController: SoftwareKeyboardController?,  titleText: String, placeholderText: String, onValueChange: (String) -> Unit) {
+    TitleWithFieldEditExpenseForm(colors = colors, titleText = titleText) {
         TextField(
             modifier = Modifier.fillMaxWidth(),
-            value = description,
+            value = value,
             onValueChange = {
-                onDescriptionChanged(it)
+                onValueChange(it)
             },
-            placeholder = { Text("Enter the description of the expense...") },
+            placeholder = { Text(placeholderText) },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(
                 onDone = {
