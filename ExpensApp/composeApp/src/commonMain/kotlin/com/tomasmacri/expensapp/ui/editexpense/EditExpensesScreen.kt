@@ -215,7 +215,7 @@ fun AmountFormField(colors: ExpensAppColorTheme, amount: TextFieldValue, keyboar
 }
 
 @Composable
-fun CategoryFormField(colors: ExpensAppColorTheme, category: String, openBottomSheet: () -> Unit) {
+fun CategoryFormField(colors: ExpensAppColorTheme, category: String, onCategorySelected: () -> Unit) {
     TitleWithFieldEditExpenseForm(colors = colors, titleText = "Category") {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -227,7 +227,7 @@ fun CategoryFormField(colors: ExpensAppColorTheme, category: String, openBottomS
             IconButton(
                 modifier = Modifier.clip(RoundedCornerShape(percent = 35)).background(colors.colorArrowRoundExpensApp),
                 onClick = {
-                    openBottomSheet()
+                    onCategorySelected()
                 },
             ) {
                 Icon(
