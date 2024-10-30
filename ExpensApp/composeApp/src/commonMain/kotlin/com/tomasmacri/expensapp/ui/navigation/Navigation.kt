@@ -8,6 +8,11 @@ import com.tomasmacri.expensapp.data.manager.ExpenseCategoriesManager
 import com.tomasmacri.expensapp.data.manager.ExpensesManager
 import com.tomasmacri.expensapp.data.repository.impl.ExpensesCategoryRepositoryImpl
 import com.tomasmacri.expensapp.data.repository.impl.ExpensesRepositoryImpl
+import com.tomasmacri.expensapp.domain.usecases.expense.AddExpenseUseCase
+import com.tomasmacri.expensapp.domain.usecases.expense.GetAllExpensesUseCase
+import com.tomasmacri.expensapp.domain.usecases.expense.GetExpenseUseCase
+import com.tomasmacri.expensapp.domain.usecases.expense.UpdateExpenseUseCase
+import com.tomasmacri.expensapp.domain.usecases.expensecategory.GetAllExpenseCateogriesUseCase
 import com.tomasmacri.expensapp.ui.allexpenses.AllExpensesScreen
 import com.tomasmacri.expensapp.ui.allexpenses.AllExpensesViewModel
 import com.tomasmacri.expensapp.ui.editexpense.EditExpenseScreen
@@ -30,7 +35,8 @@ fun Navigation(navigator: Navigator, colors: ExpensAppColorTheme) {
             route = NavRoute.HOME.route
         ) {
             val viewModel: AllExpensesViewModel = viewModel(modelClass = AllExpensesViewModel::class) {
-                AllExpensesViewModel(ExpensesRepositoryImpl(ExpensesManager))
+                val expensesRepositoryImpl = ExpensesRepositoryImpl(ExpensesManager)
+                AllExpensesViewModel(GetAllExpensesUseCase(expensesRepositoryImpl))
             }
             val allExpensesUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -38,7 +44,7 @@ fun Navigation(navigator: Navigator, colors: ExpensAppColorTheme) {
                 colors = colors,
                 uiState = allExpensesUiState,
                 onGetAllExpenses = {
-                   viewModel.getAllExpenses()
+                    viewModel.getAllExpenses()
                 },
                 onExpenseSelected = {
                     navigator.navigate("${NavRoute.EDIT_EXPENSE.baseRoute}${it.id}")
@@ -50,7 +56,14 @@ fun Navigation(navigator: Navigator, colors: ExpensAppColorTheme) {
             val expenseId = it.path<Int>("id")
 
             val viewModel: EditExpensesViewModel = viewModel(modelClass = EditExpensesViewModel::class) {
-                EditExpensesViewModel(ExpensesRepositoryImpl(ExpensesManager), ExpensesCategoryRepositoryImpl(ExpenseCategoriesManager))
+                val expensesRepositoryImpl = ExpensesRepositoryImpl(ExpensesManager)
+                val expensesCategoryRepositoryImpl = ExpensesCategoryRepositoryImpl(ExpenseCategoriesManager)
+                EditExpensesViewModel(
+                    GetExpenseUseCase(expensesRepositoryImpl),
+                    GetAllExpenseCateogriesUseCase(expensesCategoryRepositoryImpl),
+                    AddExpenseUseCase(expensesRepositoryImpl),
+                    UpdateExpenseUseCase(expensesRepositoryImpl)
+                )
             }
             val editExpensesUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -60,9 +73,9 @@ fun Navigation(navigator: Navigator, colors: ExpensAppColorTheme) {
                 colors = colors,
                 uiState = editExpensesUiState,
                 onGetInitialData = { id ->
-                id?.let { viewModel.getExpense(id) }
-                viewModel.getAllCategories()
-            }) { expense ->
+                    id?.let { viewModel.getExpense(id) }
+                    viewModel.getAllCategories()
+                }) { expense ->
                 if (expenseId == null) {
                     viewModel.addExpense(expense)
                 } else {

@@ -1,23 +1,37 @@
 package com.tomasmacri.expensapp.ui.allexpenses
 
-import com.tomasmacri.expensapp.data.repository.ExpensesRepository
+import com.tomasmacri.expensapp.domain.model.base.Operation
+import com.tomasmacri.expensapp.domain.usecases.expense.GetAllExpensesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 
-class AllExpensesViewModel(private val expensesRepository: ExpensesRepository): moe.tlaster.precompose.viewmodel.ViewModel() {
+class AllExpensesViewModel(
+    private val getAllExpensesUseCase: GetAllExpensesUseCase
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AllExpensesState())
     val uiState = _uiState.asStateFlow()
 
     fun getAllExpenses() {
         viewModelScope.launch {
-            expensesRepository.getAllExpenses().collect { newExpenseList ->
-                _uiState.update {
-                    it.copy(expenses = newExpenseList, totalAmount = newExpenseList.sumOf { expense -> expense.amount })
+            getAllExpensesUseCase().collect { operation ->
+                when (operation) {
+                    is Operation.Error -> Unit
+                    is Operation.Loading -> Unit
+                    is Operation.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                expenses = operation.data ?: emptyList(),
+                                totalAmount = operation.data?.sumOf { expense -> expense.amount } ?: 0.0
+                            )
+                        }
+                    }
                 }
+
             }
         }
     }

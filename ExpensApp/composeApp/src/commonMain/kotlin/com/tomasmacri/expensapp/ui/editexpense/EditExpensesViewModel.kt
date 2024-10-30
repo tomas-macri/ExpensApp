@@ -1,8 +1,11 @@
 package com.tomasmacri.expensapp.ui.editexpense
 
-import com.tomasmacri.expensapp.data.repository.ExpenseCategoryRepository
-import com.tomasmacri.expensapp.data.repository.ExpensesRepository
 import com.tomasmacri.expensapp.domain.model.Expense
+import com.tomasmacri.expensapp.domain.model.base.Operation
+import com.tomasmacri.expensapp.domain.usecases.expense.AddExpenseUseCase
+import com.tomasmacri.expensapp.domain.usecases.expense.GetExpenseUseCase
+import com.tomasmacri.expensapp.domain.usecases.expense.UpdateExpenseUseCase
+import com.tomasmacri.expensapp.domain.usecases.expensecategory.GetAllExpenseCateogriesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -10,37 +13,61 @@ import kotlinx.coroutines.launch
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 
-class EditExpensesViewModel(private val expensesRepository: ExpensesRepository, private val categoryRepository: ExpenseCategoryRepository): ViewModel() {
+class EditExpensesViewModel(
+    private val getExpenseUseCase: GetExpenseUseCase,
+    private val getAllExpenseCateogriesUseCase: GetAllExpenseCateogriesUseCase,
+    private val addExpenseUseCase: AddExpenseUseCase,
+    private val updateExpenseUseCase: UpdateExpenseUseCase): ViewModel() {
 
     private val _uiState = MutableStateFlow(EditExpensesState())
     val uiState = _uiState.asStateFlow()
 
     fun getExpense(id: Int) {
         viewModelScope.launch {
-            expensesRepository.getExpense(id).collect { expense ->
-                _uiState.update { it.copy(originalExpense = expense) }
+            getExpenseUseCase(id).collect { operation ->
+                when(operation) {
+                    is Operation.Error -> Unit
+                    is Operation.Loading -> Unit
+                    is Operation.Success -> {
+                        _uiState.update { it.copy(originalExpense = operation.data) }
+                    }
+                }
             }
         }
     }
 
     fun getAllCategories() {
         viewModelScope.launch {
-            categoryRepository.getAllExpenseCategories().collect {categories ->
-                _uiState.update { it.copy(categories = categories) }
+            getAllExpenseCateogriesUseCase().collect { operation ->
+                when(operation) {
+                    is Operation.Error -> Unit
+                    is Operation.Loading -> Unit
+                    is Operation.Success -> _uiState.update { it.copy(categories = operation.data ?: emptyList()) }
+                }
             }
         }
     }
 
     fun addExpense(expense: Expense) {
         viewModelScope.launch {
-            expensesRepository.addExpense(expense).collect {
+            addExpenseUseCase(expense).collect { operation ->
+                when (operation) {
+                    is Operation.Error -> Unit
+                    is Operation.Loading -> Unit
+                    is Operation.Success -> Unit
+                }
             }
         }
     }
 
     fun updateExpense(expense: Expense) {
         viewModelScope.launch {
-            expensesRepository.editExpense(expense).collect {
+            updateExpenseUseCase(expense).collect { operation ->
+                when (operation) {
+                    is Operation.Error -> Unit
+                    is Operation.Loading -> Unit
+                    is Operation.Success -> Unit
+                }
             }
         }
     }
