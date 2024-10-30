@@ -22,7 +22,7 @@ class ExpensesRepositoryImpl(private val expenseManager: ExpensesManager): Expen
         }
     }
 
-    override fun editExpense(expense: Expense): Flow<Operation<Expense>> {
+    override fun updateExpense(expense: Expense): Flow<Operation<Expense>> {
         return flow {
             emit(Operation.Loading())
             emit(Operation.Success(expenseManager.editExpense(expense)))

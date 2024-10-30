@@ -10,7 +10,7 @@ interface ExpensesRepository {
 
     fun addExpense(expense: Expense): Flow<Operation<Expense>>
 
-    fun editExpense(expense: Expense): Flow<Operation<Expense>>
+    fun updateExpense(expense: Expense): Flow<Operation<Expense>>
 
     fun getExpense(id: Int): Flow<Operation<Expense>>
 }
