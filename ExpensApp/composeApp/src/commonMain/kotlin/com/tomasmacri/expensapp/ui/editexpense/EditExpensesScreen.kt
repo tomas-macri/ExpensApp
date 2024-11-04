@@ -111,7 +111,7 @@ fun EditExpenseScreen(
         },
         sheetState = sheetState
     ) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier.background(colors.backgroundColorExpensApp).padding(16.dp).focusProperties { canFocus = !uiState.loading },
                 verticalArrangement = Arrangement.spacedBy(48.dp)
