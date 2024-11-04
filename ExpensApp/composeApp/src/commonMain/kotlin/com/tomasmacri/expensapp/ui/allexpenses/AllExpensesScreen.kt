@@ -1,12 +1,15 @@
 package com.tomasmacri.expensapp.ui.allexpenses
 
+import LoadingScreen
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -42,22 +45,25 @@ fun AllExpensesScreen(colors: ExpensAppColorTheme, uiState: AllExpensesState, on
     LaunchedEffect(Unit) {
         onGetAllExpenses()
     }
-    LazyColumn(
-        modifier = Modifier.background(colors.backgroundColorExpensApp).padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        stickyHeader {
-            Column(modifier = Modifier.fillParentMaxWidth().background(color = colors.backgroundColorExpensApp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                ExpensesTotalHeader(colors = colors, totalAmount = uiState.totalAmount, currency = "USD")
-                AllExpensesHeader(colors = colors) {}
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.background(colors.backgroundColorExpensApp).padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            stickyHeader {
+                Column(modifier = Modifier.fillParentMaxWidth().background(color = colors.backgroundColorExpensApp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    ExpensesTotalHeader(colors = colors, totalAmount = uiState.totalAmount, currency = "USD")
+                    AllExpensesHeader(colors = colors) {}
+                }
             }
-        }
-        items(uiState.expenses, key = { it.id }) { expenseItem ->
-            ExpenseItem(colors, expenseItem) {
-                onExpenseSelected(expenseItem)
+            items(uiState.expenses, key = { it.id }) { expenseItem ->
+                ExpenseItem(colors, expenseItem) {
+                    onExpenseSelected(expenseItem)
+                }
             }
-        }
 
+        }
+        LoadingScreen(uiState.loading)
     }
 }
 

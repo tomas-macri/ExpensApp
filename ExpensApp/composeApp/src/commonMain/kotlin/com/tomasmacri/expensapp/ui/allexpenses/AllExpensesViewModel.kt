@@ -21,12 +21,13 @@ class AllExpensesViewModel(
             getAllExpensesUseCase().collect { operation ->
                 when (operation) {
                     is Operation.Error -> Unit
-                    is Operation.Loading -> Unit
+                    is Operation.Loading -> _uiState.update { it.copy(loading = true) }
                     is Operation.Success -> {
                         _uiState.update {
                             it.copy(
                                 expenses = operation.data ?: emptyList(),
-                                totalAmount = operation.data?.sumOf { expense -> expense.amount } ?: 0.0
+                                totalAmount = operation.data?.sumOf { expense -> expense.amount } ?: 0.0,
+                                loading = false
                             )
                         }
                     }
