@@ -27,9 +27,9 @@ class EditExpensesViewModel(
             getExpenseUseCase(id).collect { operation ->
                 when(operation) {
                     is Operation.Error -> Unit
-                    is Operation.Loading -> Unit
+                    is Operation.Loading -> _uiState.update { it.copy(loading = true) }
                     is Operation.Success -> {
-                        _uiState.update { it.copy(originalExpense = operation.data) }
+                        _uiState.update { it.copy(originalExpense = operation.data, loading = false) }
                     }
                 }
             }
@@ -41,8 +41,8 @@ class EditExpensesViewModel(
             getAllExpenseCateogriesUseCase().collect { operation ->
                 when(operation) {
                     is Operation.Error -> Unit
-                    is Operation.Loading -> Unit
-                    is Operation.Success -> _uiState.update { it.copy(categories = operation.data ?: emptyList()) }
+                    is Operation.Loading -> _uiState.update { it.copy(loading = true) }
+                    is Operation.Success -> _uiState.update { it.copy(categories = operation.data ?: emptyList(), loading = false) }
                 }
             }
         }
@@ -53,8 +53,8 @@ class EditExpensesViewModel(
             addExpenseUseCase(expense).collect { operation ->
                 when (operation) {
                     is Operation.Error -> Unit
-                    is Operation.Loading -> Unit
-                    is Operation.Success -> Unit
+                    is Operation.Loading -> _uiState.update { it.copy(loading = true) }
+                    is Operation.Success -> _uiState.update { it.copy(loading = false) }
                 }
             }
         }
@@ -65,8 +65,8 @@ class EditExpensesViewModel(
             updateExpenseUseCase(expense).collect { operation ->
                 when (operation) {
                     is Operation.Error -> Unit
-                    is Operation.Loading -> Unit
-                    is Operation.Success -> Unit
+                    is Operation.Loading -> _uiState.update { it.copy(loading = true) }
+                    is Operation.Success -> _uiState.update { it.copy(loading = false) }
                 }
             }
         }

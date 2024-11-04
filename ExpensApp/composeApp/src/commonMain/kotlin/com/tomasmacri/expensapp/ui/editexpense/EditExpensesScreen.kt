@@ -1,12 +1,15 @@
 package com.tomasmacri.expensapp.ui.editexpense
 
+import LoadingScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -41,6 +44,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -107,44 +111,62 @@ fun EditExpenseScreen(
         },
         sheetState = sheetState
     ) {
-        Column(
-            modifier = Modifier.background(colors.backgroundColorExpensApp).padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(48.dp)
-        ) {
-            InputTextFormField(colors = colors, value = expenseName, keyboardController = keyboardController, titleText = "Name", placeholderText = "Enter the name of the expense...") {
-                expenseName = it
-            }
-            AmountFormField(colors = colors, amount = expenseAmount, keyboardController = keyboardController) { newTextFieldValue ->
-                expenseAmount = moneyFilter(expenseAmount, newTextFieldValue)
-            }
-            CategoryFormField(colors = colors, category = expenseCategory.name) {
-                scope.launch {
-                    sheetState.show()
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Column(
+                modifier = Modifier.background(colors.backgroundColorExpensApp).padding(16.dp).focusProperties { canFocus = !uiState.loading },
+                verticalArrangement = Arrangement.spacedBy(48.dp)
+            ) {
+                InputTextFormField(
+                    colors = colors,
+                    value = expenseName,
+                    keyboardController = keyboardController,
+                    titleText = "Name",
+                    placeholderText = "Enter the name of the expense..."
+                ) {
+                    expenseName = it
+                }
+                AmountFormField(colors = colors, amount = expenseAmount, keyboardController = keyboardController) { newTextFieldValue ->
+                    expenseAmount = moneyFilter(expenseAmount, newTextFieldValue)
+                }
+                CategoryFormField(colors = colors, category = expenseCategory.name) {
+                    scope.launch {
+                        sheetState.show()
+                    }
+                }
+                InputTextFormField(
+                    colors = colors,
+                    value = expenseDescription,
+                    keyboardController = keyboardController,
+                    titleText = "Description",
+                    placeholderText = "Enter the description of the expense..."
+                ) {
+                    expenseDescription = it
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                Button(
+                    modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(45)),
+                    enabled = expenseAmount.text.toDoubleOrNull() != null,
+                    onClick = {
+                        onSaveExpense(
+                            Expense(
+                                id = 0,
+                                name = expenseName,
+                                amount = expenseAmount.text.toDoubleOrNull() ?: 0.0,
+                                category = expenseCategory,
+                                description = expenseDescription
+                            )
+                        )
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = colors.purpleExpensApp, contentColor = Color.White)
+                ) {
+                    Text(
+                        modifier = Modifier.padding(8.dp),
+                        text = "Save expense",
+                        fontSize = 18.sp
+                    )
                 }
             }
-            InputTextFormField(colors = colors, value = expenseDescription, keyboardController = keyboardController, titleText = "Description", placeholderText = "Enter the description of the expense...") {
-                expenseDescription = it
-            }
-            Spacer(modifier = Modifier.weight(1f))
-            Button(
-                modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(45)),
-                enabled = expenseAmount.text.toDoubleOrNull() != null,
-                onClick = {
-                    onSaveExpense(Expense(
-                        id = 0,
-                        name = expenseName,
-                        amount = expenseAmount.text.toDoubleOrNull() ?: 0.0,
-                        category = expenseCategory,
-                        description = expenseDescription
-                    ))
-                },
-                colors = ButtonDefaults.buttonColors(backgroundColor = colors.purpleExpensApp, contentColor = Color.White)
-            ) {
-                Text(
-                    modifier = Modifier.padding(8.dp),
-                    text = "Save expense",
-                    fontSize = 18.sp)
-            }
+            LoadingScreen(uiState.loading)
         }
     }
 }

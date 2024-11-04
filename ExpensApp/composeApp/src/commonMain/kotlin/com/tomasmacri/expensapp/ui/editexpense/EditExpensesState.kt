@@ -5,5 +5,6 @@ import com.tomasmacri.expensapp.domain.model.ExpenseCategory
 
 data class EditExpensesState(
     val originalExpense: Expense? = null,
-    val categories: List<ExpenseCategory> = listOf()
+    val categories: List<ExpenseCategory> = listOf(),
+    val loading: Boolean = false
 )
