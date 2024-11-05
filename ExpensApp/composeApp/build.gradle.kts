@@ -55,6 +55,7 @@ kotlin {
             api(compose.foundation)
             api(libs.precompose)
             api(libs.precompose.viewmodel)
+            api(libs.precompose.koin)
 
             //Koin for DI
             implementation(project.dependencies.platform(libs.koin.bom))
