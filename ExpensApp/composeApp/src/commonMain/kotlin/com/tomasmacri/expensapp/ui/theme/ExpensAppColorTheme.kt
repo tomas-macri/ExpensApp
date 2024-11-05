@@ -7,6 +7,7 @@ data class ExpensAppColorTheme(
     val expenseItemExpensApp: Color,
     val backgroundColorExpensApp: Color,
     val textColorExpensApp: Color,
+    val textColorOnBackgroundExpensApp: Color,
     val addIconColorExpensApp: Color,
     val colorArrowRoundExpensApp: Color
 )

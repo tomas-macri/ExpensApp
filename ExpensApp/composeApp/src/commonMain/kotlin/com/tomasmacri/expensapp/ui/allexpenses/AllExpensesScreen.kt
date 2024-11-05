@@ -1,12 +1,15 @@
- package com.tomasmacri.expensapp.ui
+package com.tomasmacri.expensapp.ui.allexpenses
 
+import LoadingScreen
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,9 +22,8 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,34 +33,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tomasmacri.expensapp.domain.model.Expense
-import com.tomasmacri.expensapp.domain.model.expenses
 import com.tomasmacri.expensapp.ui.theme.ExpensAppColorTheme
-import com.tomasmacri.expensapp.ui.theme.ExpensAppTheme
-import com.tomasmacri.expensapp.ui.theme.getColorsTheme
-import moe.tlaster.precompose.PreComposeApp
+import com.tomasmacri.expensapp.ui.utils.getIconByExpenseCategory
+import com.tomasmacri.expensapp.ui.utils.toPriceString
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
- @OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 @Preview
-fun AllExpensesScreen() {
-    val colors = getColorsTheme()
-    PreComposeApp {
-        ExpensAppTheme {
-            LazyColumn(modifier = Modifier.background(colors.backgroundColorExpensApp).padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                stickyHeader {
-                    Column(modifier = Modifier.fillParentMaxWidth().background(color = colors.backgroundColorExpensApp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        ExpensesTotalHeader(colors = colors, totalAmount = expenses.sumOf { it.amount }, currency = "USD")
-                        AllExpensesHeader(colors = colors) {}
-                    }
+fun AllExpensesScreen(colors: ExpensAppColorTheme, uiState: AllExpensesState, onGetAllExpenses: () -> Unit, onExpenseSelected: (Expense) -> Unit) {
+    LaunchedEffect(Unit) {
+        onGetAllExpenses()
+    }
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.background(colors.backgroundColorExpensApp).padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            stickyHeader {
+                Column(modifier = Modifier.fillParentMaxWidth().background(color = colors.backgroundColorExpensApp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    ExpensesTotalHeader(colors = colors, totalAmount = uiState.totalAmount, currency = "USD")
+                    AllExpensesHeader(colors = colors) {}
                 }
-                items(expenses, key = { it.id }) { expenseItem ->
-                    ExpenseItem(colors, expenseItem) {}
-                }
-
             }
+            items(uiState.expenses, key = { it.id }) { expenseItem ->
+                ExpenseItem(colors, expenseItem) {
+                    onExpenseSelected(expenseItem)
+                }
+            }
+
         }
+        LoadingScreen(uiState.loading)
     }
 }
 
@@ -79,7 +84,7 @@ fun ExpenseItem(colors: ExpensAppColorTheme, expenseItem: Expense, onItemClick: 
             ) {
                 Image(
                     modifier = Modifier.padding(10.dp),
-                    imageVector = Icons.Default.ShoppingCart,
+                    imageVector = getIconByExpenseCategory(expenseItem.category),
                     contentDescription = "Expense category",
                     colorFilter = ColorFilter.tint(Color.White)
                 )
@@ -92,9 +97,7 @@ fun ExpenseItem(colors: ExpensAppColorTheme, expenseItem: Expense, onItemClick: 
                 Text(text = expenseItem.name, fontWeight = FontWeight.Bold, color = colors.addIconColorExpensApp, fontSize = 20.sp)
                 Text(text = expenseItem.description, color = colors.addIconColorExpensApp.copy(alpha = 0.5f), fontSize = 16.sp)
             }
-
-
-            Text(text = "$${expenseItem.amount}", fontWeight = FontWeight.Bold, color = colors.addIconColorExpensApp, fontSize = 20.sp)
+            Text(text = "$${expenseItem.amount.toPriceString()}", fontWeight = FontWeight.Bold, color = colors.addIconColorExpensApp, fontSize = 20.sp)
         }
     }
 }
@@ -129,8 +132,8 @@ fun ExpensesTotalHeader(colors: ExpensAppColorTheme, totalAmount: Double, curren
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = "$$totalAmount", fontWeight = FontWeight.ExtraBold, color = colors.textColorExpensApp, fontSize = 24.sp)
-            Text(text = currency, color = colors.textColorExpensApp.copy(alpha = 0.8f))
+            Text(text = "$${totalAmount.toPriceString()}", fontWeight = FontWeight.ExtraBold, color = colors.textColorOnBackgroundExpensApp, fontSize = 24.sp)
+            Text(text = currency, color = colors.textColorOnBackgroundExpensApp.copy(alpha = 0.8f))
         }
     }
 }
