@@ -22,69 +22,71 @@ import com.tomasmacri.expensapp.ui.theme.ExpensAppTheme
 import com.tomasmacri.expensapp.ui.theme.getColorsTheme
 import moe.tlaster.precompose.PreComposeApp
 import moe.tlaster.precompose.navigation.BackStackEntry
-import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.path
 import moe.tlaster.precompose.navigation.rememberNavigator
+import org.koin.compose.KoinContext
 
 @Composable
 fun MainApp() {
     val colors = getColorsTheme()
     PreComposeApp {
-        ExpensAppTheme {
-            val navigator = rememberNavigator()
-            val currentBackStackEntry = navigator.currentEntry.collectAsState(null).value
-            val currentNavRoute = NavRoute.findByPath(currentBackStackEntry?.path)
-            val topBarTitle = getTopAppBarTitle(currentBackStackEntry, currentNavRoute)
-            Scaffold(
-                modifier = Modifier.fillMaxSize(),
-                topBar = {
-                    TopAppBar(
-                        elevation = 0.dp,
-                        title = {
-                            Text(
-                                text = topBarTitle,
-                                color = colors.textColorExpensApp,
-                                fontSize = 24.sp
-                            )
-                        },
-                        backgroundColor = colors.backgroundColorExpensApp,
-                        navigationIcon = currentNavRoute?.navigationIcon?.let {
-                            {
-                                IconButton(
-                                    modifier = Modifier.padding(horizontal = 16.dp),
-                                    onClick = { navigator.popBackStack() },
-                                ) {
-                                    Icon(
-                                        imageVector = it,
-                                        contentDescription = "Navigation Icon",
-                                        tint = colors.addIconColorExpensApp
-                                    )
+        KoinContext {
+            ExpensAppTheme {
+                val navigator = rememberNavigator()
+                val currentBackStackEntry = navigator.currentEntry.collectAsState(null).value
+                val currentNavRoute = NavRoute.findByPath(currentBackStackEntry?.path)
+                val topBarTitle = getTopAppBarTitle(currentBackStackEntry, currentNavRoute)
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    topBar = {
+                        TopAppBar(
+                            elevation = 0.dp,
+                            title = {
+                                Text(
+                                    text = topBarTitle,
+                                    color = colors.textColorExpensApp,
+                                    fontSize = 24.sp
+                                )
+                            },
+                            backgroundColor = colors.backgroundColorExpensApp,
+                            navigationIcon = currentNavRoute?.navigationIcon?.let {
+                                {
+                                    IconButton(
+                                        modifier = Modifier.padding(horizontal = 16.dp),
+                                        onClick = { navigator.popBackStack() },
+                                    ) {
+                                        Icon(
+                                            imageVector = it,
+                                            contentDescription = "Navigation Icon",
+                                            tint = colors.addIconColorExpensApp
+                                        )
+                                    }
                                 }
                             }
-                        }
-                    )
-                },
-                floatingActionButton = {
-                    currentNavRoute?.floatingActionButtonIcon?.let {
-                        FloatingActionButton(
-                            modifier = Modifier.padding(8.dp),
-                            shape = RoundedCornerShape(50),
-                            backgroundColor = colors.addIconColorExpensApp,
-                            contentColor = Color.White,
-                            onClick = {
-                                currentNavRoute.onClickFloatingActionButton(navigator)
+                        )
+                    },
+                    floatingActionButton = {
+                        currentNavRoute?.floatingActionButtonIcon?.let {
+                            FloatingActionButton(
+                                modifier = Modifier.padding(8.dp),
+                                shape = RoundedCornerShape(50),
+                                backgroundColor = colors.addIconColorExpensApp,
+                                contentColor = Color.White,
+                                onClick = {
+                                    currentNavRoute.onClickFloatingActionButton(navigator)
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = it,
+                                    contentDescription = "FloatingActionButton Icon",
+                                    tint = Color.White
+                                )
                             }
-                        ) {
-                            Icon(
-                                imageVector = it,
-                                contentDescription = "FloatingActionButton Icon",
-                                tint = Color.White
-                            )
                         }
-                    }
-                },
-            ) {
-                Navigation(navigator = navigator, colors = colors)
+                    },
+                ) {
+                    Navigation(navigator = navigator, colors = colors)
+                }
             }
         }
     }
