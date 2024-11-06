@@ -37,6 +37,7 @@ precompose-koin = { group = "moe.tlaster", name = "precompose-koin", version.ref
 koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin-bom" }
 koin-core = { group = "io.insert-koin", name = "koin-core" }
 koin-android = { group = "io.insert-koin", name = "koin-android" }
+koin-compose = { group = "io.insert-koin", name = "koin-compose" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
