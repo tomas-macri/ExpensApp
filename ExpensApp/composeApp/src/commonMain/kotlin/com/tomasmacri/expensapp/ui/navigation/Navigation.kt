@@ -19,10 +19,12 @@ import com.tomasmacri.expensapp.ui.editexpense.EditExpenseScreen
 import com.tomasmacri.expensapp.ui.editexpense.EditExpensesViewModel
 import com.tomasmacri.expensapp.ui.theme.ExpensAppColorTheme
 import moe.tlaster.precompose.flow.collectAsStateWithLifecycle
+import moe.tlaster.precompose.koin.koinViewModel
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.path
 import moe.tlaster.precompose.viewmodel.viewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun Navigation(navigator: Navigator, colors: ExpensAppColorTheme) {
@@ -34,10 +36,7 @@ fun Navigation(navigator: Navigator, colors: ExpensAppColorTheme) {
         scene(
             route = NavRoute.HOME.route
         ) {
-            val viewModel: AllExpensesViewModel = viewModel(modelClass = AllExpensesViewModel::class) {
-                val expensesRepositoryImpl = ExpensesRepositoryImpl(ExpensesManager)
-                AllExpensesViewModel(GetAllExpensesUseCase(expensesRepositoryImpl))
-            }
+            val viewModel = koinViewModel(AllExpensesViewModel::class) { parametersOf() }
             val allExpensesUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
             AllExpensesScreen(
@@ -55,16 +54,7 @@ fun Navigation(navigator: Navigator, colors: ExpensAppColorTheme) {
         ) {
             val expenseId = it.path<Int>("id")
 
-            val viewModel: EditExpensesViewModel = viewModel(modelClass = EditExpensesViewModel::class) {
-                val expensesRepositoryImpl = ExpensesRepositoryImpl(ExpensesManager)
-                val expensesCategoryRepositoryImpl = ExpensesCategoryRepositoryImpl(ExpenseCategoriesManager)
-                EditExpensesViewModel(
-                    GetExpenseUseCase(expensesRepositoryImpl),
-                    GetAllExpenseCateogriesUseCase(expensesCategoryRepositoryImpl),
-                    AddExpenseUseCase(expensesRepositoryImpl),
-                    UpdateExpenseUseCase(expensesRepositoryImpl)
-                )
-            }
+            val viewModel = koinViewModel(EditExpensesViewModel::class) { parametersOf() }
             val editExpensesUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
 
