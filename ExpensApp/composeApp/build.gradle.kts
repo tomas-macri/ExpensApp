@@ -46,6 +46,9 @@ kotlin {
 
             //Koin for Android DI
             implementation(libs.koin.android)
+
+            //Android driver for SQLDelight DB
+            implementation(libs.sqldelight.android.driver)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -71,6 +74,10 @@ kotlin {
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
+        }
+        iosMain.dependencies {
+            //Native driver for SQLDelight DB
+            implementation(libs.sqldelight.native.driver)
         }
     }
 }
