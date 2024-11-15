@@ -1,0 +1,32 @@
+CREATE TABLE ExpenseEntity  (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    amount REAL NOT NULL,
+    category TEXT NOT NULL,
+    description TEXT NOT NULL
+);
+
+INSERT INTO ExpenseEntity (name, amount, category, description) VALUES
+    ("Groceries", 58.3, "GROCERIES", "Weekly buy"),
+    ("Dinner", 15.2, "FOOD", "Anniversary"),
+    ("Football tickets", 25.3, "OTHER", "Racing Club vs Independiente"),
+    ("Fleetwood Mac", 123.5, "CONCERTS", "Fleetwood Mac concert on Wembley"),
+    ("Plane tickets", 1164.0, "TRIP", "Plane tickets to Madrid"),
+    ("Doors", 503.0, "HOUSE", "New doors for the rooms"),
+    ("Lautaro's present", 35.32, "PARTY", "A present for Lautaro's birthday"),
+    ("Football tickets", 25.3, "OTHER", "Racing Club vs Boca Juniors"),
+    ("Tomorrowland", 381.5, "CONCERTS", "Tomorrowland W1"),
+    ("Mercadona", 34.3, "GROCERIE", "Weekly buy");
+
+selectAll:
+SELECT * FROM ExpenseEntity;
+
+insert:
+INSERT INTO ExpenseEntity (name, amount, category, description) VALUES (?, ?, ?, ?);
+
+update:
+UPDATE ExpenseEntity SET name = ?, amount = ?, category = ?, description = ? WHERE id = ?;
+
+delete:
+DELETE FROM ExpenseEntity WHERE id = ?;
+
