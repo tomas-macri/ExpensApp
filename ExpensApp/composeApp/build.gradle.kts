@@ -12,7 +12,7 @@ plugins {
 
 sqldelight {
     databases {
-        create("Database") {
+        create("ExpensAppDatabase") {
             packageName.set("com.tomasmacri.expensapp.db")
         }
     }
