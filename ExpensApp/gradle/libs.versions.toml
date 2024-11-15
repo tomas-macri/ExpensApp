@@ -17,7 +17,7 @@ kotlin = "2.0.20"
 
 precompose ="1.6.2"
 koin-bom="4.0.0"
-sql-delight = "2.0.1"
+sql-delight = "2.0.2"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
