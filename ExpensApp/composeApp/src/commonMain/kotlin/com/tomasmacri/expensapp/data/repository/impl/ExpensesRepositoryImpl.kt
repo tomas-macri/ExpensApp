@@ -29,7 +29,7 @@ class ExpensesRepositoryImpl(private val expenseManager: ExpensesManager): Expen
         }
     }
 
-    override fun getExpense(id: Int): Flow<Operation<Expense>> {
+    override fun getExpense(id: Long): Flow<Operation<Expense>> {
         return flow {
             emit(Operation.Loading())
             emit(Operation.Success(expenseManager.getExpense(id)))

@@ -4,15 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.tomasmacri.expensapp.data.manager.ExpenseCategoriesManager
-import com.tomasmacri.expensapp.data.manager.ExpensesManager
-import com.tomasmacri.expensapp.data.repository.impl.ExpensesCategoryRepositoryImpl
-import com.tomasmacri.expensapp.data.repository.impl.ExpensesRepositoryImpl
-import com.tomasmacri.expensapp.domain.usecases.expense.AddExpenseUseCase
-import com.tomasmacri.expensapp.domain.usecases.expense.GetAllExpensesUseCase
-import com.tomasmacri.expensapp.domain.usecases.expense.GetExpenseUseCase
-import com.tomasmacri.expensapp.domain.usecases.expense.UpdateExpenseUseCase
-import com.tomasmacri.expensapp.domain.usecases.expensecategory.GetAllExpenseCateogriesUseCase
 import com.tomasmacri.expensapp.ui.allexpenses.AllExpensesScreen
 import com.tomasmacri.expensapp.ui.allexpenses.AllExpensesViewModel
 import com.tomasmacri.expensapp.ui.editexpense.EditExpenseScreen
@@ -23,7 +14,6 @@ import moe.tlaster.precompose.koin.koinViewModel
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.path
-import moe.tlaster.precompose.viewmodel.viewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
@@ -52,7 +42,7 @@ fun Navigation(navigator: Navigator, colors: ExpensAppColorTheme) {
         scene(
             route = NavRoute.EDIT_EXPENSE.route
         ) {
-            val expenseId = it.path<Int>("id")
+            val expenseId = it.path<Long>("id")
 
             val viewModel = koinViewModel(EditExpensesViewModel::class) { parametersOf() }
             val editExpensesUiState by viewModel.uiState.collectAsStateWithLifecycle()

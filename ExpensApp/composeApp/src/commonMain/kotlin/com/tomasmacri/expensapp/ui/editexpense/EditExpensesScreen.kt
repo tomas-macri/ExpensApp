@@ -66,10 +66,10 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun EditExpenseScreen(
-    expenseId: Int?,
+    expenseId: Long?,
     colors: ExpensAppColorTheme,
     uiState: EditExpensesState,
-    onGetInitialData: (Int?) -> Unit,
+    onGetInitialData: (Long?) -> Unit,
     onSaveExpense: (Expense) -> Unit
 ) {
     var expenseName by remember { mutableStateOf("") }

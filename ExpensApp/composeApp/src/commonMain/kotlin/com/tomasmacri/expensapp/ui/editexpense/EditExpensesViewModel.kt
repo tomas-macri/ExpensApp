@@ -22,7 +22,7 @@ class EditExpensesViewModel(
     private val _uiState = MutableStateFlow(EditExpensesState())
     val uiState = _uiState.asStateFlow()
 
-    fun getExpense(id: Int) {
+    fun getExpense(id: Long) {
         viewModelScope.launch {
             getExpenseUseCase(id).collect { operation ->
                 when(operation) {

@@ -12,5 +12,5 @@ interface ExpensesRepository {
 
     fun updateExpense(expense: Expense): Flow<Operation<Expense>>
 
-    fun getExpense(id: Int): Flow<Operation<Expense>>
+    fun getExpense(id: Long): Flow<Operation<Expense>>
 }
