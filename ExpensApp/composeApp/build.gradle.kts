@@ -7,6 +7,15 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.sqlDelight)
+}
+
+sqldelight {
+    databases {
+        create("Database") {
+            packageName.set("com.tomasmacri.expensapp.db")
+        }
+    }
 }
 
 kotlin {
