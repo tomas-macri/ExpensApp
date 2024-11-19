@@ -21,6 +21,9 @@ INSERT INTO ExpenseEntity (name, amount, category, description) VALUES
 selectAll:
 SELECT * FROM ExpenseEntity;
 
+selectOne:
+SELECT * FROM ExpenseEntity WHERE id = ?;
+
 insert:
 INSERT INTO ExpenseEntity (name, amount, category, description) VALUES (?, ?, ?, ?);
 

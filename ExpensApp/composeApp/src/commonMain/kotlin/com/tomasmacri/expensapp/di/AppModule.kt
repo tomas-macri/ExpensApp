@@ -1,7 +1,6 @@
 package com.tomasmacri.expensapp.di
 
 import com.tomasmacri.expensapp.data.manager.ExpenseCategoriesManager
-import com.tomasmacri.expensapp.data.manager.ExpensesManager
 import com.tomasmacri.expensapp.data.repository.ExpenseCategoryRepository
 import com.tomasmacri.expensapp.data.repository.ExpensesRepository
 import com.tomasmacri.expensapp.data.repository.impl.ExpensesCategoryRepositoryImpl
@@ -21,7 +20,6 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val managersModule = module {
-    single { ExpensesManager }.withOptions { createdAtStart() }
     single { ExpenseCategoriesManager }.withOptions { createdAtStart() }
 }
 
