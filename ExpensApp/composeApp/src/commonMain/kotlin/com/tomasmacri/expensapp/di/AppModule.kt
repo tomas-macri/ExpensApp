@@ -44,4 +44,6 @@ val viewModelModule = module {
     factoryOf(::EditExpensesViewModel)
 }
 
+expect val platformModule: Module
+
 val appModule = listOf(managersModule, repositoryModule, useCasesModule, viewModelModule)
