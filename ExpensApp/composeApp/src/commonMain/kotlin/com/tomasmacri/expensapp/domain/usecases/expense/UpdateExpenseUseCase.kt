@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.flowOf
 
 class UpdateExpenseUseCase(private val repository: ExpensesRepository) {
 
-    operator fun invoke(expense: Expense): Flow<Operation<Expense>> {
+    operator fun invoke(expense: Expense): Flow<Operation<Unit>> {
         if (expense.amount < 0) {
             return flowOf(Operation.Error("The amount of the expense must be positive"))
         }
