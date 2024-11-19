@@ -5,6 +5,7 @@ import com.tomasmacri.expensapp.data.repository.ExpenseCategoryRepository
 import com.tomasmacri.expensapp.data.repository.ExpensesRepository
 import com.tomasmacri.expensapp.data.repository.impl.ExpensesCategoryRepositoryImpl
 import com.tomasmacri.expensapp.data.repository.impl.ExpensesRepositoryImpl
+import com.tomasmacri.expensapp.db.ExpensAppDatabase
 import com.tomasmacri.expensapp.domain.usecases.expense.AddExpenseUseCase
 import com.tomasmacri.expensapp.domain.usecases.expense.GetAllExpensesUseCase
 import com.tomasmacri.expensapp.domain.usecases.expense.GetExpenseUseCase
@@ -12,6 +13,7 @@ import com.tomasmacri.expensapp.domain.usecases.expense.UpdateExpenseUseCase
 import com.tomasmacri.expensapp.domain.usecases.expensecategory.GetAllExpenseCateogriesUseCase
 import com.tomasmacri.expensapp.ui.allexpenses.AllExpensesViewModel
 import com.tomasmacri.expensapp.ui.editexpense.EditExpensesViewModel
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.createdAtStart
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -26,6 +28,7 @@ val managersModule = module {
 val repositoryModule = module {
     singleOf(::ExpensesRepositoryImpl).bind(ExpensesRepository::class)
     singleOf(::ExpensesCategoryRepositoryImpl).bind(ExpenseCategoryRepository::class)
+    single { ExpensAppDatabase.invoke(get()) }
 }
 
 val useCasesModule = module {
