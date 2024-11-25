@@ -7,16 +7,26 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.sqlDelight)
+}
+
+sqldelight {
+    databases {
+        create("ExpensAppDatabase") {
+            packageName.set("com.tomasmacri.expensapp.db")
+        }
+    }
 }
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "17"
+            }
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -36,6 +46,9 @@ kotlin {
 
             //Koin for Android DI
             implementation(libs.koin.android)
+
+            //Android driver for SQLDelight DB
+            implementation(libs.sqldelight.android.driver)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -61,6 +74,10 @@ kotlin {
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
+        }
+        iosMain.dependencies {
+            //Native driver for SQLDelight DB
+            implementation(libs.sqldelight.native.driver)
         }
     }
 }
@@ -91,8 +108,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         compose = true

@@ -8,9 +8,9 @@ interface ExpensesRepository {
 
     fun getAllExpenses(): Flow<Operation<List<Expense>>>
 
-    fun addExpense(expense: Expense): Flow<Operation<Expense>>
+    fun addExpense(expense: Expense): Flow<Operation<Unit>>
 
-    fun updateExpense(expense: Expense): Flow<Operation<Expense>>
+    fun updateExpense(expense: Expense): Flow<Operation<Unit>>
 
-    fun getExpense(id: Int): Flow<Operation<Expense>>
+    fun getExpense(id: Long): Flow<Operation<Expense>>
 }
