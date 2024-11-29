@@ -67,4 +67,11 @@ class ExpensesRepositoryImpl(expenseAppDatabase: ExpensAppDatabase) : ExpensesRe
             }
         }
     }
+
+    override fun deleteExpense(id: Long): Flow<Operation<Unit>> {
+        return flow {
+            emit(Operation.Loading())
+            emit(Operation.Success(queries.delete(id)))
+        }
+    }
 }

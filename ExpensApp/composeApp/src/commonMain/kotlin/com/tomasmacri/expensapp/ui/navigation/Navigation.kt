@@ -37,6 +37,9 @@ fun Navigation(navigator: Navigator, colors: ExpensAppColorTheme) {
                 },
                 onExpenseSelected = {
                     navigator.navigate("${NavRoute.EDIT_EXPENSE.baseRoute}${it.id}")
+                },
+                onDeleteExpense = {
+                    viewModel.deleteExpense(it.id)
                 })
         }
         scene(
