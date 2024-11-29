@@ -30,18 +30,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tomasmacri.expensapp.domain.model.Expense
 import com.tomasmacri.expensapp.ui.theme.ExpensAppColorTheme
+import com.tomasmacri.expensapp.ui.utils.SwipeToDeleteContainer
 import com.tomasmacri.expensapp.ui.utils.getIconByExpenseCategory
 import com.tomasmacri.expensapp.ui.utils.toPriceString
+import expensapp.composeapp.generated.resources.Res
+import expensapp.composeapp.generated.resources.money
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 @Preview
-fun AllExpensesScreen(colors: ExpensAppColorTheme, uiState: AllExpensesState, onGetAllExpenses: () -> Unit, onExpenseSelected: (Expense) -> Unit) {
+fun AllExpensesScreen(colors: ExpensAppColorTheme, uiState: AllExpensesState, onGetAllExpenses: () -> Unit, onExpenseSelected: (Expense) -> Unit, onDeleteExpense: (Expense) -> Unit) {
     LaunchedEffect(Unit) {
         onGetAllExpenses()
     }
@@ -56,9 +61,26 @@ fun AllExpensesScreen(colors: ExpensAppColorTheme, uiState: AllExpensesState, on
                     AllExpensesHeader(colors = colors) {}
                 }
             }
-            items(uiState.expenses, key = { it.id }) { expenseItem ->
-                ExpenseItem(colors, expenseItem) {
-                    onExpenseSelected(expenseItem)
+            if (uiState.expenses.isEmpty()) {
+                item {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Column(verticalArrangement = Arrangement.spacedBy(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("You do not have any expenses!", fontWeight = FontWeight.SemiBold, fontSize = 18.sp, textAlign = TextAlign.Center)
+                            Image(modifier = Modifier.size(150.dp), painter = painterResource(Res.drawable.money), contentDescription = "Money")
+                            Text( modifier = Modifier.padding(24.dp), text = "If you need to, you can add it with the button on the bottom right corner", fontSize = 14.sp, textAlign = TextAlign.Center)
+                        }
+                    }
+                }
+            } else {
+                items(uiState.expenses, key = { it.id }) { expenseItem ->
+                    SwipeToDeleteContainer(
+                        item = expenseItem,
+                        onDelete = { onDeleteExpense(expenseItem) }
+                    ) {
+                        ExpenseItem(colors, expenseItem) {
+                            onExpenseSelected(expenseItem)
+                        }
+                    }
                 }
             }
 
