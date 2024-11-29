@@ -7,6 +7,7 @@ import com.tomasmacri.expensapp.data.repository.impl.ExpensesCategoryRepositoryI
 import com.tomasmacri.expensapp.data.repository.impl.ExpensesRepositoryImpl
 import com.tomasmacri.expensapp.db.ExpensAppDatabase
 import com.tomasmacri.expensapp.domain.usecases.expense.AddExpenseUseCase
+import com.tomasmacri.expensapp.domain.usecases.expense.DeleteExpenseUseCase
 import com.tomasmacri.expensapp.domain.usecases.expense.GetAllExpensesUseCase
 import com.tomasmacri.expensapp.domain.usecases.expense.GetExpenseUseCase
 import com.tomasmacri.expensapp.domain.usecases.expense.UpdateExpenseUseCase
@@ -37,6 +38,7 @@ val useCasesModule = module {
     factoryOf(::AddExpenseUseCase)
     factoryOf(::UpdateExpenseUseCase)
     factoryOf(::GetAllExpenseCateogriesUseCase)
+    factoryOf(::DeleteExpenseUseCase)
 }
 
 val viewModelModule = module {
