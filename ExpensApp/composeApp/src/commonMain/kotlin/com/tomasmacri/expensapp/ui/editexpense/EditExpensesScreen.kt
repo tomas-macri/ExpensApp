@@ -212,7 +212,7 @@ fun AmountFormField(colors: ExpensAppColorTheme, amount: TextFieldValue, keyboar
                 onValueChange = {
                     onAmountChanged(it)
                 },
-                placeholder = { Text("0.00", fontSize = 35.sp, fontWeight = FontWeight.SemiBold) },
+                placeholder = { Text("0.00", fontSize = 35.sp, fontWeight = FontWeight.SemiBold, color = colors.textColorExpensApp) },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(
                     onDone = {
@@ -232,7 +232,7 @@ fun AmountFormField(colors: ExpensAppColorTheme, amount: TextFieldValue, keyboar
             )
             Text("USD", fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, color = colors.textColorExpensApp.copy(alpha = 0.5f))
         }
-        Divider(color = colors.textColorExpensApp, thickness = 2.dp)
+        Divider(color = colors.blackExpensApp, thickness = 2.dp)
     }
 }
 
@@ -244,7 +244,8 @@ fun CategoryFormField(colors: ExpensAppColorTheme, category: String, onCategoryS
                 modifier = Modifier.weight(1f),
                 text = category,
                 fontSize = 20.sp,
-                fontWeight = FontWeight.ExtraBold
+                fontWeight = FontWeight.ExtraBold,
+                color = colors.textColorExpensApp
             )
             IconButton(
                 modifier = Modifier.clip(RoundedCornerShape(percent = 35)).background(colors.colorArrowRoundExpensApp),
@@ -259,7 +260,7 @@ fun CategoryFormField(colors: ExpensAppColorTheme, category: String, onCategoryS
                 )
             }
         }
-        Divider(color = colors.textColorExpensApp, thickness = 2.dp)
+        Divider(color = colors.blackExpensApp, thickness = 2.dp)
     }
 }
 
@@ -273,7 +274,7 @@ fun InputTextFormField(colors: ExpensAppColorTheme, value: String, keyboardContr
             onValueChange = {
                 onValueChange(it)
             },
-            placeholder = { Text(placeholderText) },
+            placeholder = { Text(placeholderText, color = colors.textColorExpensApp) },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(
                 onDone = {
@@ -291,7 +292,7 @@ fun InputTextFormField(colors: ExpensAppColorTheme, value: String, keyboardContr
             ),
             textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.ExtraBold)
         )
-        Divider(color = colors.textColorExpensApp, thickness = 2.dp)
+        Divider(color = colors.blackExpensApp, thickness = 2.dp)
     }
 }
 

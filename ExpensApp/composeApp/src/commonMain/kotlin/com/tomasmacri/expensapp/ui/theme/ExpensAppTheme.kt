@@ -5,6 +5,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.tomasmacri.expensapp.ui.utils.SystemTheme
 
 @Composable
 fun ExpensAppTheme(content: @Composable () -> Unit) {
@@ -23,7 +24,7 @@ fun ExpensAppTheme(content: @Composable () -> Unit) {
 
 @Composable
 fun getColorsTheme(): ExpensAppColorTheme {
-    val isDarkMode = false
+    val isDarkMode = SystemTheme.isSystemInDarkMode()
 
     val purpleExpensApp = Color(0xFF6A66FF)
     val expenseItemExpensApp = if (isDarkMode) Color(0xFF090808) else Color(0xFFF1F1F1)
@@ -32,6 +33,8 @@ fun getColorsTheme(): ExpensAppColorTheme {
     val textColorOnBackgroundExpensApp = if (isDarkMode) Color.Black else Color.White
     val addIconColorExpensApp = if (isDarkMode) purpleExpensApp else Color.Black
     val colorArrowRoundExpensApp = if (isDarkMode) purpleExpensApp else Color.Gray.copy(alpha = 0.2f)
+    val blackExpensApp = Color.Black
+    val whiteExpensApp = Color.White
 
     return ExpensAppColorTheme(
         purpleExpensApp = purpleExpensApp,
@@ -40,6 +43,8 @@ fun getColorsTheme(): ExpensAppColorTheme {
         textColorExpensApp = textColorExpensApp,
         textColorOnBackgroundExpensApp = textColorOnBackgroundExpensApp,
         addIconColorExpensApp = addIconColorExpensApp,
-        colorArrowRoundExpensApp = colorArrowRoundExpensApp
+        colorArrowRoundExpensApp = colorArrowRoundExpensApp,
+        blackExpensApp = blackExpensApp,
+        whiteExpensApp = whiteExpensApp
     )
 }

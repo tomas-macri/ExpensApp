@@ -65,9 +65,9 @@ fun AllExpensesScreen(colors: ExpensAppColorTheme, uiState: AllExpensesState, on
                 item {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Column(verticalArrangement = Arrangement.spacedBy(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("You do not have any expenses!", fontWeight = FontWeight.SemiBold, fontSize = 18.sp, textAlign = TextAlign.Center)
+                            Text("You do not have any expenses!", fontWeight = FontWeight.SemiBold, fontSize = 18.sp, textAlign = TextAlign.Center, color = colors.textColorExpensApp)
                             Image(modifier = Modifier.size(150.dp), painter = painterResource(Res.drawable.money), contentDescription = "Money")
-                            Text( modifier = Modifier.padding(24.dp), text = "If you need to, you can add it with the button on the bottom right corner", fontSize = 14.sp, textAlign = TextAlign.Center)
+                            Text( modifier = Modifier.padding(24.dp), text = "If you need to, you can add it with the button on the bottom right corner", fontSize = 14.sp, textAlign = TextAlign.Center, color = colors.textColorExpensApp)
                         }
                     }
                 }
@@ -116,10 +116,10 @@ fun ExpenseItem(colors: ExpensAppColorTheme, expenseItem: Expense, onItemClick: 
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(text = expenseItem.name, fontWeight = FontWeight.Bold, color = colors.addIconColorExpensApp, fontSize = 20.sp)
-                Text(text = expenseItem.description, color = colors.addIconColorExpensApp.copy(alpha = 0.5f), fontSize = 16.sp)
+                Text(text = expenseItem.name, fontWeight = FontWeight.Bold, color = colors.textColorExpensApp, fontSize = 20.sp)
+                Text(text = expenseItem.description, color = colors.textColorExpensApp.copy(alpha = 0.5f), fontSize = 16.sp)
             }
-            Text(text = "$${expenseItem.amount.toPriceString()}", fontWeight = FontWeight.Bold, color = colors.addIconColorExpensApp, fontSize = 20.sp)
+            Text(text = "$${expenseItem.amount.toPriceString()}", fontWeight = FontWeight.Bold, color = colors.textColorExpensApp, fontSize = 20.sp)
         }
     }
 }
@@ -130,14 +130,14 @@ fun AllExpensesHeader(colors: ExpensAppColorTheme, onViewAllClicked: () -> Unit)
         modifier = Modifier.fillMaxWidth().padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(modifier = Modifier.weight(1f), text = "All Expenses", fontWeight = FontWeight.Bold, color = colors.addIconColorExpensApp, fontSize = 24.sp)
+        Text(modifier = Modifier.weight(1f), text = "All Expenses", fontWeight = FontWeight.Bold, color = colors.textColorExpensApp, fontSize = 24.sp)
         Button(
             colors = ButtonDefaults.buttonColors(backgroundColor = colors.expenseItemExpensApp),
             onClick = { onViewAllClicked() },
             modifier = Modifier.clip(RoundedCornerShape(48.dp)),
             shape = RoundedCornerShape(48.dp),
         ) {
-            Text(text = "View all")
+            Text(text = "View all", color = colors.textColorExpensApp)
         }
     }
 }
@@ -150,12 +150,12 @@ fun ExpensesTotalHeader(colors: ExpensAppColorTheme, totalAmount: Double, curren
             .fillMaxWidth()
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().background(colors.addIconColorExpensApp).padding(horizontal = 24.dp, vertical = 48.dp),
+            modifier = Modifier.fillMaxWidth().background(colors.blackExpensApp).padding(horizontal = 24.dp, vertical = 48.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = "$${totalAmount.toPriceString()}", fontWeight = FontWeight.ExtraBold, color = colors.textColorOnBackgroundExpensApp, fontSize = 24.sp)
-            Text(text = currency, color = colors.textColorOnBackgroundExpensApp.copy(alpha = 0.8f))
+            Text(text = "$${totalAmount.toPriceString()}", fontWeight = FontWeight.ExtraBold, color = colors.whiteExpensApp, fontSize = 24.sp)
+            Text(text = currency, color = colors.whiteExpensApp.copy(alpha = 0.6f))
         }
     }
 }
