@@ -9,5 +9,7 @@ data class ExpensAppColorTheme(
     val textColorExpensApp: Color,
     val textColorOnBackgroundExpensApp: Color,
     val addIconColorExpensApp: Color,
-    val colorArrowRoundExpensApp: Color
+    val colorArrowRoundExpensApp: Color,
+    val blackExpensApp: Color,
+    val whiteExpensApp: Color
 )
