@@ -20,6 +20,8 @@ import com.tomasmacri.expensapp.ui.navigation.Navigation
 import com.tomasmacri.expensapp.ui.navigation.TopBarTitles
 import com.tomasmacri.expensapp.ui.theme.ExpensAppTheme
 import com.tomasmacri.expensapp.ui.theme.getColorsTheme
+import com.tomasmacri.expensapp.ui.utils.CrossConfigDevice
+import com.tomasmacri.expensapp.ui.utils.SystemTheme
 import moe.tlaster.precompose.PreComposeApp
 import moe.tlaster.precompose.navigation.BackStackEntry
 import moe.tlaster.precompose.navigation.path
@@ -27,7 +29,8 @@ import moe.tlaster.precompose.navigation.rememberNavigator
 import org.koin.compose.KoinContext
 
 @Composable
-fun MainApp() {
+fun MainApp(crossConfigDevice: CrossConfigDevice? = null) {
+    SystemTheme.crossConfigDevice = crossConfigDevice
     val colors = getColorsTheme()
     PreComposeApp {
         KoinContext {
