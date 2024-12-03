@@ -61,7 +61,7 @@ fun MainApp(crossConfigDevice: CrossConfigDevice? = null) {
                                         Icon(
                                             imageVector = it,
                                             contentDescription = "Navigation Icon",
-                                            tint = colors.addIconColorExpensApp
+                                            tint = colors.textColorExpensApp
                                         )
                                     }
                                 }
